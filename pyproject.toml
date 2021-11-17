@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "coco-lib"
+version = "0.1.0"
+description = "COCO dataset library."
+license = "MIT"
+authors = ["Kevin Barnard <kbarnard@mbari.org>"]
+maintainers = ["Kevin Barnard <kbarnard@mbari.org>"]
+readme = "README.md"
+homepage = "https://github.com/kevinsbarnard/coco-lib"
+repository = "https://github.com/kevinsbarnard/coco-lib"
+
+[tool.poetry.dependencies]
+python = "^3.6.1"
+dataclasses-json = "^0.5.4"
+
+[tool.poetry.dev-dependencies]
+
+[tool.poetry.urls]
+"Bug Tracker" = "https://github.com/kevinsbarnard/coco-lib/issues"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
