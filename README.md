@@ -45,8 +45,8 @@ pip install coco-lib
 ...         width=640, height=480, 
 ...         file_name='test.jpg', 
 ...         license=mit_license.id,
-...         flickr_url=None,
-...         coco_url=None,
+...         flickr_url='',
+...         coco_url='',
 ...         date_captured=datetime.now()
 ...     ),
 ...     ...
@@ -55,7 +55,7 @@ pip install coco-lib
 ...     ObjectDetectionCategory(
 ...         id=0,
 ...         name='pedestrian',
-...         supercategory='person'
+...         supercategory=''
 ...     ),
 ...     ...
 ... ]
@@ -64,7 +64,7 @@ pip install coco-lib
 ...         id=0,
 ...         image_id=0,
 ...         category_id=0,
-...         segmentation=None,
+...         segmentation=[],
 ...         area=800.0,
 ...         bbox=[300.0, 100.0, 20.0, 40.0],
 ...         is_crowd=0
@@ -74,7 +74,7 @@ pip install coco-lib
 >>> dataset = ObjectDetectionDataset(  # Create the dataset
 ...     info=info,
 ...     images=images,
-...     licenses=mit_license,
+...     licenses=[mit_license],
 ...     categories=categories,
 ...     annotations=annotations
 ... )
