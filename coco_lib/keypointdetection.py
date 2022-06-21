@@ -5,7 +5,7 @@ from dataclasses_json import dataclass_json
 
 from .bases import Dataset
 from .common import Info, Image, License
-from .objectdetection import ObjectDetectionAnnotation, ObjectDetectionCategory
+from .objectdetection import ObjectDetectionAnnotation, ObjectDetectionCategory, ObjectDetectionDataset
 
 
 @dataclass_json
@@ -24,6 +24,6 @@ class KeypointDetectionCategory(ObjectDetectionCategory):
 
 @dataclass_json
 @dataclass
-class KeypointDetectionDataset(Dataset):
+class KeypointDetectionDataset(ObjectDetectionDataset):
     annotations: List[KeypointDetectionAnnotation]
     categories: List[KeypointDetectionCategory]
