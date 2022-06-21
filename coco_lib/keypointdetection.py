@@ -3,9 +3,8 @@ from typing import List, Tuple
 
 from dataclasses_json import dataclass_json
 
-from .bases import Dataset
-from .common import Info, Image, License
-from .objectdetection import ObjectDetectionAnnotation, ObjectDetectionCategory
+from coco_lib.bases import Dataset
+from coco_lib.objectdetection import ObjectDetectionAnnotation, ObjectDetectionCategory
 
 
 @dataclass_json

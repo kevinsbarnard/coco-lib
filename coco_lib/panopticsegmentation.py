@@ -3,8 +3,7 @@ from typing import List, Tuple
 
 from dataclasses_json import dataclass_json
 
-from .bases import Annotation, Category, Dataset
-from .common import Info, Image, License
+from coco_lib.bases import Annotation, Category, Dataset
 
 
 @dataclass_json
@@ -38,8 +37,5 @@ class PanopticSegmentationCategory(Category):
 @dataclass_json
 @dataclass
 class PanopticSegmentationDataset(Dataset):
-    info: Info
-    images: List[Image]
-    licenses: List[License]
     annotations: List[PanopticSegmentationAnnotation]
     categories: List[PanopticSegmentationCategory]

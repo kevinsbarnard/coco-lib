@@ -3,8 +3,7 @@ from typing import List
 
 from dataclasses_json import dataclass_json
 
-from .bases import Annotation, Dataset
-from .common import Info, Image, License
+from coco_lib.bases import Annotation, Dataset
 
 
 @dataclass_json
@@ -18,7 +17,4 @@ class ImageCaptioningAnnotation(Annotation):
 @dataclass_json
 @dataclass
 class ImageCaptioningDataset(Dataset):
-    info: Info
-    images: List[Image]
-    licenses: List[License]
     annotations: List[ImageCaptioningAnnotation]
