@@ -31,8 +31,8 @@ class Image:
     height: int
     file_name: str
     license: int
-    flickr_url: str
     coco_url: str
+    flickr_url: Optional[str] = None
     date_captured: Optional[datetime] = field(
         metadata=config(
             encoder=lambda d: d.strftime('%Y-%m-%d %H:%M:%S') if d is not None else None,
@@ -40,7 +40,7 @@ class Image:
             mm_field=fields.DateTime(format='iso')
         )
     )
-    
+
 
 @dataclass_json
 @dataclass
