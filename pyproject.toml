@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "coco-lib"
-version = "0.1.3"
+version = "0.1.4"
 description = "COCO dataset library."
 license = "MIT"
 authors = ["Kevin Barnard <kbarnard@mbari.org>"]
