@@ -29,6 +29,6 @@ class Dataset(ABC):
             f.write(self.to_json(**kwargs))
 
     @classmethod
-    def load(cls: Type[DatasetT], path: PathLike) -> DatasetT:
+    def load(cls: Type[DatasetT], path: PathLike, **kwargs) -> DatasetT:
         with open(path, 'r') as f:
-            return cls.from_json(f.read())
+            return cls.from_json(f.read(), **kwargs)
