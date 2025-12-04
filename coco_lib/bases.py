@@ -1,7 +1,7 @@
 from abc import ABC
 from dataclasses import dataclass
 from os import PathLike
-from typing import List
+from typing import List, Type, TypeVar
 
 from dataclasses_json import dataclass_json
 
@@ -15,6 +15,7 @@ class Annotation(ABC):
 class Category(ABC):
     pass
 
+DatasetT = TypeVar('DatasetT', bound='Dataset')
 
 @dataclass_json
 @dataclass
@@ -23,11 +24,11 @@ class Dataset(ABC):
     images: List[Image]
     licenses: List[License]
     
-    def save(self, path: PathLike, **kwargs):
+    def save(self, path: PathLike, **kwargs) -> None:
         with open(path, 'w') as f:
             f.write(self.to_json(**kwargs))
 
     @classmethod
-    def load(cls, path: PathLike, **kwargs):
+    def load(cls: Type[DatasetT], path: PathLike, **kwargs) -> DatasetT:
         with open(path, 'r') as f:
             return cls.from_json(f.read(), **kwargs)
