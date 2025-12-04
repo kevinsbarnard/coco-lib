@@ -15,7 +15,9 @@ class Annotation(ABC):
 class Category(ABC):
     pass
 
-DatasetT = TypeVar('DatasetT', bound='Dataset')
+
+DatasetT = TypeVar("DatasetT", bound="Dataset")
+
 
 @dataclass_json
 @dataclass
@@ -23,12 +25,12 @@ class Dataset(ABC):
     info: Info
     images: List[Image]
     licenses: List[License]
-    
+
     def save(self, path: PathLike, **kwargs) -> None:
-        with open(path, 'w') as f:
+        with open(path, "w") as f:
             f.write(self.to_json(**kwargs))
 
     @classmethod
     def load(cls: Type[DatasetT], path: PathLike, **kwargs) -> DatasetT:
-        with open(path, 'r') as f:
+        with open(path, "r") as f:
             return cls.from_json(f.read(), **kwargs)
