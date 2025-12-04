@@ -9,15 +9,17 @@ from marshmallow import fields
 @dataclass_json
 @dataclass
 class Info:
-    year: int
-    version: str
-    description: str
-    contributor: str
-    url: str
-    date_created: datetime = field(
+    year: Optional[int] = None
+    version: Optional[str] = None
+    description: Optional[str] = None
+    contributor: Optional[str] = None
+    url: Optional[str] = None
+    date_created: Optional[datetime] = field(
         metadata=config(
-            encoder=lambda d: d.strftime("%Y/%m/%d"),
-            decoder=lambda s: datetime.strptime(s, "%Y/%m/%d"),
+            encoder=lambda d: d.strftime("%Y/%m/%d") if d is not None else None,
+            decoder=lambda s: datetime.strptime(s, "%Y/%m/%d")
+            if s is not None
+            else None,
             mm_field=fields.DateTime(format="%Y/%m/%d"),
         )
     )
@@ -30,9 +32,9 @@ class Image:
     width: int
     height: int
     file_name: str
-    license: int
-    coco_url: str
+    license: Optional[int] = None
     flickr_url: Optional[str] = None
+    coco_url: Optional[str] = None
     date_captured: Optional[datetime] = field(
         metadata=config(
             encoder=lambda d: d.strftime("%Y-%m-%d %H:%M:%S")
@@ -51,4 +53,4 @@ class Image:
 class License:
     id: int
     name: str
-    url: str
+    url: Optional[str] = None
