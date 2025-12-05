@@ -109,6 +109,7 @@ The library now supports flexible datetime parsing using [dateparser](https://da
 ...     assert info.date_created is None  # Returns None
 ...     assert len([warning for warning in w if issubclass(warning.category, UserWarning)]) > 0  # Warning emitted
 >>> # Serialization maintains original formats for backward compatibility
+>>> from datetime import datetime
 >>> info = Info(date_created=datetime(2023, 1, 15))
 >>> json_str = info.to_json()
 >>> assert "2023/01/15" in json_str  # Uses YYYY/MM/DD format
