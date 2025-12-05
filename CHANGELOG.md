@@ -2,6 +2,31 @@
 
 <!-- version list -->
 
+## v0.2.0 (2025-12-05)
+
+### Chores
+
+- Wire in version var to PSR, bump to match current
+  ([`05c1a16`](https://github.com/kevinsbarnard/coco-lib/commit/05c1a1600344236734970f7b1583ec10fbbcb37b))
+
+### Code Style
+
+- Fix whitespace typo ([#8](https://github.com/kevinsbarnard/coco-lib/pull/8),
+  [`762460b`](https://github.com/kevinsbarnard/coco-lib/commit/762460bc90b9085d7cbd1d9990123a74e8923c8c))
+
+### Documentation
+
+- Add datetime import to README date parse example
+  ([#8](https://github.com/kevinsbarnard/coco-lib/pull/8),
+  [`762460b`](https://github.com/kevinsbarnard/coco-lib/commit/762460bc90b9085d7cbd1d9990123a74e8923c8c))
+
+### Features
+
+- Add flexible datetime parsing support with dateparser
+  ([#8](https://github.com/kevinsbarnard/coco-lib/pull/8),
+  [`762460b`](https://github.com/kevinsbarnard/coco-lib/commit/762460bc90b9085d7cbd1d9990123a74e8923c8c))
+
+
 ## v0.1.5 (2025-12-05)
 
 ### Bug Fixes
