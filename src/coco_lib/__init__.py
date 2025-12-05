@@ -15,7 +15,13 @@ Example:
     ...     id=1, image_id=1, category_id=1, segmentation=[[0.0, 0.0, 10.0, 10.0]],
     ...     area=100.0, bbox=(0.0, 0.0, 10.0, 10.0), iscrowd=0
     ... )]
-    >>> dataset = ObjectDetectionDataset(info, images, licenses, annotations, categories)
+    >>> dataset = ObjectDetectionDataset(
+    ...     info=info,
+    ...     images=images,
+    ...     licenses=licenses,
+    ...     annotations=annotations,
+    ...     categories=categories
+    ... )
     >>> len(dataset.images)
     1
 """

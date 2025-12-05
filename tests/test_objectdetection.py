@@ -2,6 +2,7 @@
 
 import json
 from pathlib import Path
+from typing import List
 
 from coco_lib.common import Image, Info, License
 from coco_lib.objectdetection import (
@@ -109,9 +110,9 @@ class TestObjectDetectionAnnotation:
         )
 
         json_str = ann.to_json()
-        assert '"id": 1' in json_str
-        assert '"image_id": 1' in json_str
-        assert '"category_id": 1' in json_str
+        assert '"id":1' in json_str
+        assert '"image_id":1' in json_str
+        assert '"category_id":1' in json_str
 
     def test_annotation_json_deserialization(self) -> None:
         """Test JSON deserialization of annotation."""
@@ -146,9 +147,9 @@ class TestObjectDetectionCategory:
         cat = ObjectDetectionCategory(id=1, name="car", supercategory="vehicle")
         json_str = cat.to_json()
 
-        assert '"id": 1' in json_str
-        assert '"name": "car"' in json_str
-        assert '"supercategory": "vehicle"' in json_str
+        assert '"id":1' in json_str
+        assert '"name":"car"' in json_str
+        assert '"supercategory":"vehicle"' in json_str
 
     def test_category_json_deserialization(self) -> None:
         """Test JSON deserialization of category."""
@@ -179,8 +180,8 @@ class TestObjectDetectionDataset:
     def test_dataset_initialization(
         self,
         sample_info: Info,
-        sample_images: list[Image],
-        sample_licenses: list[License],
+        sample_images: List[Image],
+        sample_licenses: List[License],
     ) -> None:
         """Test creating an ObjectDetectionDataset."""
         annotations = [
@@ -214,8 +215,8 @@ class TestObjectDetectionDataset:
     def test_dataset_multiple_annotations(
         self,
         sample_info: Info,
-        sample_images: list[Image],
-        sample_licenses: list[License],
+        sample_images: List[Image],
+        sample_licenses: List[License],
     ) -> None:
         """Test dataset with multiple annotations."""
         annotations = [
@@ -249,8 +250,8 @@ class TestObjectDetectionDataset:
         self,
         temp_dir: Path,
         sample_info: Info,
-        sample_images: list[Image],
-        sample_licenses: list[License],
+        sample_images: List[Image],
+        sample_licenses: List[License],
     ) -> None:
         """Test saving and loading a dataset."""
         annotations = [
@@ -289,8 +290,8 @@ class TestObjectDetectionDataset:
         self,
         temp_dir: Path,
         sample_info: Info,
-        sample_images: list[Image],
-        sample_licenses: list[License],
+        sample_images: List[Image],
+        sample_licenses: List[License],
     ) -> None:
         """Test the JSON structure of saved dataset."""
         annotations = [

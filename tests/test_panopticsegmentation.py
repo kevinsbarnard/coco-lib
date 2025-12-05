@@ -2,6 +2,7 @@
 
 import json
 from pathlib import Path
+from typing import List
 
 from coco_lib.common import Image, Info, License
 from coco_lib.panopticsegmentation import (
@@ -38,8 +39,8 @@ class TestSegmentInfo:
         )
 
         json_str = segment.to_json()
-        assert '"id": 1' in json_str
-        assert '"category_id": 1' in json_str
+        assert '"id":1' in json_str
+        assert '"category_id":1' in json_str
 
     def test_segment_json_deserialization(self) -> None:
         """Test JSON deserialization of SegmentInfo."""
@@ -144,8 +145,8 @@ class TestPanopticSegmentationAnnotation:
         )
 
         json_str = ann.to_json()
-        assert '"image_id": 1' in json_str
-        assert '"file_name": "mask_001.png"' in json_str
+        assert '"image_id":1' in json_str
+        assert '"file_name":"mask_001.png"' in json_str
         assert '"segments_info"' in json_str
 
     def test_annotation_json_deserialization(self) -> None:
@@ -214,7 +215,7 @@ class TestPanopticSegmentationCategory:
         )
 
         json_str = cat.to_json()
-        assert '"isthing": 1' in json_str
+        assert '"isthing":1' in json_str
         assert '"color"' in json_str
 
     def test_category_json_deserialization(self) -> None:
@@ -236,8 +237,8 @@ class TestPanopticSegmentationDataset:
     def test_dataset_initialization(
         self,
         sample_info: Info,
-        sample_images: list[Image],
-        sample_licenses: list[License],
+        sample_images: List[Image],
+        sample_licenses: List[License],
     ) -> None:
         """Test creating a PanopticSegmentationDataset."""
         annotations = [
@@ -279,8 +280,8 @@ class TestPanopticSegmentationDataset:
     def test_dataset_mixed_categories(
         self,
         sample_info: Info,
-        sample_images: list[Image],
-        sample_licenses: list[License],
+        sample_images: List[Image],
+        sample_licenses: List[License],
     ) -> None:
         """Test dataset with both things and stuff categories."""
         annotations = [
@@ -340,8 +341,8 @@ class TestPanopticSegmentationDataset:
         self,
         temp_dir: Path,
         sample_info: Info,
-        sample_images: list[Image],
-        sample_licenses: list[License],
+        sample_images: List[Image],
+        sample_licenses: List[License],
     ) -> None:
         """Test saving and loading a dataset."""
         annotations = [
@@ -390,8 +391,8 @@ class TestPanopticSegmentationDataset:
         self,
         temp_dir: Path,
         sample_info: Info,
-        sample_images: list[Image],
-        sample_licenses: list[License],
+        sample_images: List[Image],
+        sample_licenses: List[License],
     ) -> None:
         """Test the JSON structure of saved dataset."""
         annotations = [

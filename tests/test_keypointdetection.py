@@ -2,6 +2,7 @@
 
 import json
 from pathlib import Path
+from typing import List
 
 from coco_lib.common import Image, Info, License
 from coco_lib.keypointdetection import (
@@ -99,7 +100,7 @@ class TestKeypointDetectionAnnotation:
 
         json_str = ann.to_json()
         assert '"keypoints"' in json_str
-        assert '"num_keypoints": 1' in json_str
+        assert '"num_keypoints":1' in json_str
 
     def test_annotation_json_deserialization(self) -> None:
         """Test JSON deserialization of annotation."""
@@ -183,8 +184,8 @@ class TestKeypointDetectionDataset:
     def test_dataset_initialization(
         self,
         sample_info: Info,
-        sample_images: list[Image],
-        sample_licenses: list[License],
+        sample_images: List[Image],
+        sample_licenses: List[License],
     ) -> None:
         """Test creating a KeypointDetectionDataset."""
         annotations = [
@@ -225,8 +226,8 @@ class TestKeypointDetectionDataset:
     def test_dataset_multiple_annotations(
         self,
         sample_info: Info,
-        sample_images: list[Image],
-        sample_licenses: list[License],
+        sample_images: List[Image],
+        sample_licenses: List[License],
     ) -> None:
         """Test dataset with multiple person annotations."""
         annotations = [
@@ -268,8 +269,8 @@ class TestKeypointDetectionDataset:
         self,
         temp_dir: Path,
         sample_info: Info,
-        sample_images: list[Image],
-        sample_licenses: list[License],
+        sample_images: List[Image],
+        sample_licenses: List[License],
     ) -> None:
         """Test saving and loading a dataset."""
         annotations = [
@@ -316,8 +317,8 @@ class TestKeypointDetectionDataset:
         self,
         temp_dir: Path,
         sample_info: Info,
-        sample_images: list[Image],
-        sample_licenses: list[License],
+        sample_images: List[Image],
+        sample_licenses: List[License],
     ) -> None:
         """Test the JSON structure of saved dataset."""
         annotations = [

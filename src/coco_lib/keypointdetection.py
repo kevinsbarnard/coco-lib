@@ -4,17 +4,12 @@ This module provides dataclasses for working with COCO keypoint detection datase
 extending object detection with skeletal keypoint information for pose estimation.
 """
 
-from dataclasses import dataclass
 from typing import List, Tuple
 
-from dataclasses_json import dataclass_json
-
-from coco_lib.bases import Dataset
+from coco_lib.common import Dataset
 from coco_lib.objectdetection import ObjectDetectionAnnotation, ObjectDetectionCategory
 
 
-@dataclass_json
-@dataclass
 class KeypointDetectionAnnotation(ObjectDetectionAnnotation):
     """Annotation for keypoint detection task.
 
@@ -48,8 +43,6 @@ class KeypointDetectionAnnotation(ObjectDetectionAnnotation):
     num_keypoints: int
 
 
-@dataclass_json
-@dataclass
 class KeypointDetectionCategory(ObjectDetectionCategory):
     """Category definition for keypoint detection.
 
@@ -79,8 +72,6 @@ class KeypointDetectionCategory(ObjectDetectionCategory):
     skeleton: List[Tuple[int, int]]
 
 
-@dataclass_json
-@dataclass
 class KeypointDetectionDataset(Dataset):
     """Complete keypoint detection dataset.
 
@@ -114,5 +105,5 @@ class KeypointDetectionDataset(Dataset):
         2
     """
 
-    annotations: List[KeypointDetectionAnnotation]
-    categories: List[KeypointDetectionCategory]
+    annotations: List[KeypointDetectionAnnotation] = []
+    categories: List[KeypointDetectionCategory] = []
