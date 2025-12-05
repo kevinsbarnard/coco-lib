@@ -4,16 +4,14 @@ This module provides dataclasses for working with COCO object detection datasets
 including annotations with bounding boxes and segmentation masks.
 """
 
-from dataclasses import dataclass
-from typing import List, Tuple
+from typing import List, Optional, Tuple
 
-from dataclasses_json import dataclass_json
+from pydantic import Field
 
-from coco_lib.bases import Annotation, Category, Dataset
+from coco_lib.bases import Annotation, Category
+from coco_lib.common import Dataset
 
 
-@dataclass_json
-@dataclass
 class ObjectDetectionAnnotation(Annotation):
     """Annotation for object detection task.
 
@@ -48,14 +46,12 @@ class ObjectDetectionAnnotation(Annotation):
     id: int
     image_id: int
     category_id: int
-    segmentation: List[List[float]]
-    area: float
+    segmentation: Optional[List[List[float]]] = None
+    area: Optional[float] = Field(default=None, ge=0)
     bbox: Tuple[float, float, float, float]
-    iscrowd: int
+    iscrowd: Optional[int] = Field(default=None, ge=0, le=1)
 
 
-@dataclass_json
-@dataclass
 class ObjectDetectionCategory(Category):
     """Category definition for object detection.
 
@@ -80,11 +76,9 @@ class ObjectDetectionCategory(Category):
 
     id: int
     name: str
-    supercategory: str
+    supercategory: Optional[str] = None
 
 
-@dataclass_json
-@dataclass
 class ObjectDetectionDataset(Dataset):
     """Complete object detection dataset.
 
@@ -114,5 +108,5 @@ class ObjectDetectionDataset(Dataset):
         1
     """
 
-    annotations: List[ObjectDetectionAnnotation]
-    categories: List[ObjectDetectionCategory]
+    annotations: List[ObjectDetectionAnnotation] = []
+    categories: List[ObjectDetectionCategory] = []

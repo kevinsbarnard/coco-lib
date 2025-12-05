@@ -3,7 +3,7 @@
 import tempfile
 from datetime import datetime
 from pathlib import Path
-from typing import Generator
+from typing import Generator, List
 
 import pytest
 
@@ -56,11 +56,11 @@ def sample_image() -> Image:
 
 
 @pytest.fixture
-def sample_images() -> list[Image]:
+def sample_images() -> List[Image]:
     """Provide a list of sample Image objects for testing.
 
     Returns:
-        list[Image]: List of sample images with varied dimensions.
+        List[Image]: List of sample images with varied dimensions.
     """
     return [
         Image(id=1, width=640, height=480, file_name="image_001.jpg", license=1),
@@ -84,11 +84,11 @@ def sample_license() -> License:
 
 
 @pytest.fixture
-def sample_licenses() -> list[License]:
+def sample_licenses() -> List[License]:
     """Provide a list of sample License objects for testing.
 
     Returns:
-        list[License]: List of sample licenses.
+        List[License]: List of sample licenses.
     """
     return [
         License(

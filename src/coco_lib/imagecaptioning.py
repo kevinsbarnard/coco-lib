@@ -4,16 +4,12 @@ This module provides dataclasses for working with COCO image captioning datasets
 where each annotation contains a textual description of an image.
 """
 
-from dataclasses import dataclass
 from typing import List
 
-from dataclasses_json import dataclass_json
+from coco_lib.bases import Annotation
+from coco_lib.common import Dataset
 
-from coco_lib.bases import Annotation, Dataset
 
-
-@dataclass_json
-@dataclass
 class ImageCaptioningAnnotation(Annotation):
     """Annotation for image captioning task.
 
@@ -41,8 +37,6 @@ class ImageCaptioningAnnotation(Annotation):
     caption: str
 
 
-@dataclass_json
-@dataclass
 class ImageCaptioningDataset(Dataset):
     """Complete image captioning dataset.
 
@@ -71,4 +65,4 @@ class ImageCaptioningDataset(Dataset):
         'A test image'
     """
 
-    annotations: List[ImageCaptioningAnnotation]
+    annotations: List[ImageCaptioningAnnotation] = []

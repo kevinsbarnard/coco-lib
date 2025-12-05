@@ -5,23 +5,24 @@ including dataset metadata, image information, and license details.
 """
 
 import warnings
+from os import PathLike
 from datetime import datetime
-from dataclasses import dataclass, field
-from typing import Optional
+from typing import List, Optional, Type, TypeVar, Union
 
 from dateparser import parse as parse_datetime_string
-from dataclasses_json import dataclass_json, config
-from marshmallow import fields
+from pydantic import field_validator, field_serializer
+
+from coco_lib.bases import Serializable
 
 
 def parse_datetime(date_string: Optional[str]) -> Optional[datetime]:
     """Parse a datetime string flexibly using dateparser.
 
     Args:
-        date_string: A string representing a date/time, or None.
+        date_string (Optional[str]): A string representing a date/time, or None.
 
     Returns:
-        A datetime object if parsing succeeds, None otherwise.
+        Optional[datetime]: A datetime object if parsing succeeds, None otherwise.
 
     Warnings:
         Emits a warning if the date_string is provided but cannot be parsed.
@@ -51,9 +52,7 @@ def parse_datetime(date_string: Optional[str]) -> Optional[datetime]:
         return None
 
 
-@dataclass_json
-@dataclass
-class Info:
+class Info(Serializable):
     """Dataset metadata information.
 
     Contains high-level information about the dataset including versioning,
@@ -88,19 +87,41 @@ class Info:
     description: Optional[str] = None
     contributor: Optional[str] = None
     url: Optional[str] = None
-    date_created: Optional[datetime] = field(
-        default=None,
-        metadata=config(
-            encoder=lambda d: d.strftime("%Y/%m/%d") if d is not None else None,
-            decoder=parse_datetime,
-            mm_field=fields.DateTime(format="%Y/%m/%d"),
-        ),
-    )
+    date_created: Optional[datetime] = None
+
+    @field_validator("date_created", mode="before")
+    @classmethod
+    def parse_date_created(
+        cls, v: Optional[Union[datetime, str]]
+    ) -> Optional[datetime]:
+        """Validator to parse date_created from string to datetime.
+
+        Args:
+            v (Optional[Union[datetime, str]]): The input datetime or string.
+
+        Returns:
+            Optional[datetime]: The parsed datetime object or None.
+        """
+        if isinstance(v, datetime):
+            return v
+        return parse_datetime(v)
+
+    @field_serializer("date_created", mode="plain")
+    def serialize_date_created(self, value: Optional[datetime]) -> Optional[str]:
+        """Serializer to convert date_created datetime to string.
+
+        Args:
+            value (Optional[datetime]): The datetime object.
+
+        Returns:
+            Optional[str]: The formatted date string or None.
+        """
+        if value is None:
+            return None
+        return value.strftime("%Y/%m/%d")
 
 
-@dataclass_json
-@dataclass
-class Image:
+class Image(Serializable):
     """Image metadata in a COCO dataset.
 
     Contains information about a single image including dimensions,
@@ -139,21 +160,41 @@ class Image:
     license: Optional[int] = None
     flickr_url: Optional[str] = None
     coco_url: Optional[str] = None
-    date_captured: Optional[datetime] = field(
-        default=None,
-        metadata=config(
-            encoder=lambda d: d.strftime("%Y-%m-%d %H:%M:%S")
-            if d is not None
-            else None,
-            decoder=parse_datetime,
-            mm_field=fields.DateTime(format="iso"),
-        ),
-    )
+    date_captured: Optional[datetime] = None
+
+    @field_validator("date_captured", mode="before")
+    @classmethod
+    def parse_date_captured(
+        cls, v: Optional[Union[datetime, str]]
+    ) -> Optional[datetime]:
+        """Validator to parse date_captured from string to datetime.
+
+        Args:
+            v (Optional[Union[datetime, str]]): The input datetime or string.
+
+        Returns:
+            Optional[datetime]: The parsed datetime object or None.
+        """
+        if isinstance(v, datetime):
+            return v
+        return parse_datetime(v)
+
+    @field_serializer("date_captured", mode="plain")
+    def serialize_date_captured(self, value: Optional[datetime]) -> Optional[str]:
+        """Serializer to convert date_captured datetime to string.
+
+        Args:
+            value (Optional[datetime]): The datetime object.
+
+        Returns:
+            Optional[str]: The formatted date string or None.
+        """
+        if value is None:
+            return None
+        return value.strftime("%Y-%m-%d %H:%M:%S")
 
 
-@dataclass_json
-@dataclass
-class License:
+class License(Serializable):
     """Image license information.
 
     Represents a license under which an image is distributed.
@@ -176,3 +217,106 @@ class License:
     id: int
     name: str
     url: Optional[str] = None
+
+
+DatasetT = TypeVar("DatasetT", bound="Dataset")
+
+
+class Dataset(Serializable):
+    """Base class for COCO datasets.
+
+    This class provides the common structure and methods for all COCO dataset types,
+    including metadata, images, and licenses.
+
+    Attributes:
+        info (Info): Dataset metadata including version, description, and creation date.
+        images (List[Image]): List of images in the dataset.
+        licenses (List[License]): List of image licenses.
+
+    Example:
+        >>> from coco_lib.objectdetection import ObjectDetectionDataset
+        >>> from coco_lib.common import Info, Image, License
+        >>> from coco_lib.objectdetection import ObjectDetectionAnnotation, ObjectDetectionCategory
+        >>> info = Info(year=2023, version="1.0", description="Test dataset")
+        >>> images = [Image(id=1, width=640, height=480, file_name="test.jpg")]
+        >>> licenses = [License(id=1, name="CC BY 4.0")]
+        >>> annotations = [ObjectDetectionAnnotation(
+        ...     id=1, image_id=1, category_id=1,
+        ...     segmentation=[[0, 0, 100, 0, 100, 100, 0, 100]],
+        ...     area=10000.0, bbox=(10.0, 10.0, 100.0, 100.0), iscrowd=0
+        ... )]
+        >>> categories = [ObjectDetectionCategory(id=1, name="person", supercategory="human")]
+        >>> dataset = ObjectDetectionDataset(info=info, images=images, licenses=licenses,
+        ...                                   annotations=annotations, categories=categories)
+        >>> len(dataset.images)
+        1
+    """
+
+    info: Info = Info()
+    images: List[Image] = []
+    licenses: List[License] = []
+
+    def save(self, path: PathLike, **kwargs) -> None:
+        """Save the dataset to a JSON file.
+
+        Args:
+            path (PathLike): Path to save the dataset JSON file.
+            **kwargs: Additional keyword arguments passed to the JSON encoder.
+
+        Example:
+            >>> import tempfile
+            >>> from coco_lib.objectdetection import ObjectDetectionDataset
+            >>> from coco_lib.common import Info, Image, License
+            >>> from coco_lib.objectdetection import ObjectDetectionAnnotation, ObjectDetectionCategory
+            >>> info = Info(year=2023)
+            >>> images = [Image(id=1, width=640, height=480, file_name="test.jpg")]
+            >>> licenses = [License(id=1, name="CC BY 4.0")]
+            >>> annotations = [ObjectDetectionAnnotation(
+            ...     id=1, image_id=1, category_id=1, segmentation=[[0.0, 0.0, 10.0, 0.0]],
+            ...     area=100.0, bbox=(0.0, 0.0, 10.0, 10.0), iscrowd=0
+            ... )]
+            >>> categories = [ObjectDetectionCategory(id=1, name="object", supercategory="thing")]
+            >>> dataset = ObjectDetectionDataset(info=info, images=images, licenses=licenses,
+            ...                                   annotations=annotations, categories=categories)
+            >>> with tempfile.NamedTemporaryFile(mode='w', suffix='.json', delete=False) as f:
+            ...     dataset.save(f.name)
+        """
+        with open(path, "w") as f:
+            f.write(self.to_json(**kwargs))
+
+    @classmethod
+    def load(cls: Type[DatasetT], path: PathLike, **kwargs) -> DatasetT:
+        """Load a dataset from a JSON file.
+
+        Args:
+            path (PathLike): Path to the dataset JSON file.
+            **kwargs: Additional keyword arguments passed to the JSON decoder.
+
+        Returns:
+            DatasetT: An instance of the dataset class loaded from the file.
+
+        Example:
+            >>> import tempfile
+            >>> import json
+            >>> from coco_lib.objectdetection import ObjectDetectionDataset
+            >>> # Create a temporary JSON file
+            >>> data = {
+            ...     "info": {"year": 2023},
+            ...     "images": [{"id": 1, "width": 640, "height": 480, "file_name": "test.jpg"}],
+            ...     "licenses": [{"id": 1, "name": "CC BY 4.0"}],
+            ...     "annotations": [{
+            ...         "id": 1, "image_id": 1, "category_id": 1,
+            ...         "segmentation": [[0.0, 0.0, 10.0, 0.0]], "area": 100.0,
+            ...         "bbox": [0.0, 0.0, 10.0, 10.0], "iscrowd": 0
+            ...     }],
+            ...     "categories": [{"id": 1, "name": "object", "supercategory": "thing"}]
+            ... }
+            >>> with tempfile.NamedTemporaryFile(mode='w', suffix='.json', delete=False) as f:
+            ...     json.dump(data, f)
+            ...     temp_path = f.name
+            >>> dataset = ObjectDetectionDataset.load(temp_path)
+            >>> len(dataset.images)
+            1
+        """
+        with open(path, "r") as f:
+            return cls.from_json(f.read(), **kwargs)

@@ -4,17 +4,15 @@ This module provides dataclasses for working with COCO panoptic segmentation dat
 which combine instance segmentation (things) and semantic segmentation (stuff).
 """
 
-from dataclasses import dataclass
-from typing import List, Tuple
+from typing import List, Optional, Tuple
 
-from dataclasses_json import dataclass_json
+from pydantic import Field
 
-from coco_lib.bases import Annotation, Category, Dataset
+from coco_lib.bases import Annotation, Category, Serializable
+from coco_lib.common import Dataset
 
 
-@dataclass_json
-@dataclass
-class SegmentInfo:
+class SegmentInfo(Serializable):
     """Information about a single segment in panoptic segmentation.
 
     Represents one segmented region in a panoptic segmentation mask,
@@ -41,13 +39,11 @@ class SegmentInfo:
 
     id: int
     category_id: int
-    area: float
+    area: Optional[float] = Field(default=None, ge=0)
     bbox: Tuple[float, float, float, float]
-    iscrowd: int
+    iscrowd: Optional[int] = Field(default=None, ge=0, le=1)
 
 
-@dataclass_json
-@dataclass
 class PanopticSegmentationAnnotation(Annotation):
     """Annotation for panoptic segmentation task.
 
@@ -78,11 +74,9 @@ class PanopticSegmentationAnnotation(Annotation):
 
     image_id: int
     file_name: str
-    segments_info: List[SegmentInfo]
+    segments_info: List[SegmentInfo] = []
 
 
-@dataclass_json
-@dataclass
 class PanopticSegmentationCategory(Category):
     """Category definition for panoptic segmentation.
 
@@ -112,13 +106,11 @@ class PanopticSegmentationCategory(Category):
 
     id: int
     name: str
-    supercategory: str
-    isthing: int
+    supercategory: Optional[str] = None
+    isthing: int = Field(ge=0, le=1)
     color: Tuple[int, int, int]
 
 
-@dataclass_json
-@dataclass
 class PanopticSegmentationDataset(Dataset):
     """Complete panoptic segmentation dataset.
 
@@ -154,5 +146,5 @@ class PanopticSegmentationDataset(Dataset):
         1
     """
 
-    annotations: List[PanopticSegmentationAnnotation]
-    categories: List[PanopticSegmentationCategory]
+    annotations: List[PanopticSegmentationAnnotation] = []
+    categories: List[PanopticSegmentationCategory] = []

@@ -1,6 +1,6 @@
 [project]
 name = "coco-lib"
-requires-python = ">=3.6"
+requires-python = ">=3.8"
 authors = [
     {name = "Kevin Barnard", email = "kbarnard@mbari.org"}
 ]
@@ -12,8 +12,8 @@ readme = "README.md"
 license = "MIT"
 license-files = ["LICENSE"]
 dependencies = [
-    "dataclasses-json>=0.5.4",
     "dateparser>=1.1.3",
+    "pydantic>=1.7.4",
 ]
 dynamic = ["version"]
 

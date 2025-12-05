@@ -2,6 +2,7 @@
 
 import json
 from pathlib import Path
+from typing import List
 
 from coco_lib.common import Image, Info, License
 from coco_lib.imagecaptioning import (
@@ -60,9 +61,9 @@ class TestImageCaptioningAnnotation:
         )
 
         json_str = ann.to_json()
-        assert '"id": 1' in json_str
-        assert '"image_id": 1' in json_str
-        assert '"caption": "Test caption"' in json_str
+        assert '"id":1' in json_str
+        assert '"image_id":1' in json_str
+        assert '"caption":"Test caption"' in json_str
 
     def test_annotation_json_deserialization(self) -> None:
         """Test JSON deserialization of annotation."""
@@ -104,8 +105,8 @@ class TestImageCaptioningDataset:
     def test_dataset_initialization(
         self,
         sample_info: Info,
-        sample_images: list[Image],
-        sample_licenses: list[License],
+        sample_images: List[Image],
+        sample_licenses: List[License],
     ) -> None:
         """Test creating an ImageCaptioningDataset."""
         annotations = [
@@ -130,8 +131,8 @@ class TestImageCaptioningDataset:
     def test_dataset_multiple_captions(
         self,
         sample_info: Info,
-        sample_images: list[Image],
-        sample_licenses: list[License],
+        sample_images: List[Image],
+        sample_licenses: List[License],
     ) -> None:
         """Test dataset with multiple captions per image."""
         annotations = []
@@ -160,8 +161,8 @@ class TestImageCaptioningDataset:
         self,
         temp_dir: Path,
         sample_info: Info,
-        sample_images: list[Image],
-        sample_licenses: list[License],
+        sample_images: List[Image],
+        sample_licenses: List[License],
     ) -> None:
         """Test saving and loading a dataset."""
         annotations = [
@@ -197,8 +198,8 @@ class TestImageCaptioningDataset:
         self,
         temp_dir: Path,
         sample_info: Info,
-        sample_images: list[Image],
-        sample_licenses: list[License],
+        sample_images: List[Image],
+        sample_licenses: List[License],
     ) -> None:
         """Test the JSON structure of saved dataset."""
         annotations = [
@@ -232,8 +233,8 @@ class TestImageCaptioningDataset:
     def test_dataset_empty_annotations(
         self,
         sample_info: Info,
-        sample_images: list[Image],
-        sample_licenses: list[License],
+        sample_images: List[Image],
+        sample_licenses: List[License],
     ) -> None:
         """Test dataset with no annotations."""
         dataset = ImageCaptioningDataset(
