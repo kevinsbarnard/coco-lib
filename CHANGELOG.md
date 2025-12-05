@@ -2,6 +2,14 @@
 
 <!-- version list -->
 
+## v0.1.5 (2025-12-05)
+
+### Bug Fixes
+
+- Use dynamic version in pyproject toml
+  ([`647c006`](https://github.com/kevinsbarnard/coco-lib/commit/647c006a5e770b0b11353e6c151d8960a93d1cfb))
+
+
 ## v0.1.4 (2025-12-04)
 
 ### Bug Fixes
