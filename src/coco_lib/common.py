@@ -4,12 +4,51 @@ This module defines common structures used across all COCO dataset types,
 including dataset metadata, image information, and license details.
 """
 
+import warnings
 from datetime import datetime
 from dataclasses import dataclass, field
 from typing import Optional
 
+from dateparser import parse as parse_datetime_string
 from dataclasses_json import dataclass_json, config
 from marshmallow import fields
+
+
+def parse_datetime(date_string: Optional[str]) -> Optional[datetime]:
+    """Parse a datetime string flexibly using dateparser.
+
+    Args:
+        date_string: A string representing a date/time, or None.
+
+    Returns:
+        A datetime object if parsing succeeds, None otherwise.
+
+    Warnings:
+        Emits a warning if the date_string is provided but cannot be parsed.
+    """
+    if date_string is None:
+        return None
+
+    try:
+        # Suppress deprecation warnings from dateparser's internal implementation
+        with warnings.catch_warnings():
+            warnings.filterwarnings("ignore", category=DeprecationWarning)
+            result = parse_datetime_string(date_string)
+
+        if result is None:
+            warnings.warn(
+                f"Failed to parse datetime string: {date_string!r}. Returning None.",
+                UserWarning,
+                stacklevel=3,
+            )
+        return result
+    except Exception as e:
+        warnings.warn(
+            f"Error parsing datetime string {date_string!r}: {e}. Returning None.",
+            UserWarning,
+            stacklevel=3,
+        )
+        return None
 
 
 @dataclass_json
@@ -53,9 +92,7 @@ class Info:
         default=None,
         metadata=config(
             encoder=lambda d: d.strftime("%Y/%m/%d") if d is not None else None,
-            decoder=lambda s: datetime.strptime(s, "%Y/%m/%d")
-            if s is not None
-            else None,
+            decoder=parse_datetime,
             mm_field=fields.DateTime(format="%Y/%m/%d"),
         ),
     )
@@ -108,9 +145,7 @@ class Image:
             encoder=lambda d: d.strftime("%Y-%m-%d %H:%M:%S")
             if d is not None
             else None,
-            decoder=lambda s: datetime.strptime(s, "%Y-%m-%d %H:%M:%S")
-            if s is not None
-            else None,
+            decoder=parse_datetime,
             mm_field=fields.DateTime(format="iso"),
         ),
     )
