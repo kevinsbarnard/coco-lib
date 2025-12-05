@@ -87,3 +87,29 @@ pip install coco-lib
 >>> from coco_lib.objectdetection import ObjectDetectionDataset
 >>> dataset = ObjectDetectionDataset.load('test_dataset.json')  # Load the dataset
 ```
+
+### Flexible Datetime Parsing
+
+The library now supports flexible datetime parsing using [dateparser](https://dateparser.readthedocs.io/). Date fields (`Info.date_created` and `Image.date_captured`) can now accept various datetime formats:
+
+```python
+>>> from coco_lib.common import Info, Image
+>>> # Various date formats are automatically parsed
+>>> info1 = Info.from_json('{"date_created": "2023/01/15"}')  # Original format
+>>> info2 = Info.from_json('{"date_created": "2023-01-15"}')  # ISO format  
+>>> info3 = Info.from_json('{"date_created": "January 15, 2023"}')  # Natural language
+>>> info4 = Info.from_json('{"date_created": "15 Jan 2023"}')  # Short format
+>>> # All produce the same date
+>>> assert info1.date_created.date() == info2.date_created.date() == info3.date_created.date() == info4.date_created.date()
+>>> # Invalid dates return None and emit a warning
+>>> import warnings
+>>> with warnings.catch_warnings(record=True) as w:
+...     warnings.simplefilter("always")
+...     info = Info.from_json('{"date_created": "invalid date"}')
+...     assert info.date_created is None  # Returns None
+...     assert len([warning for warning in w if issubclass(warning.category, UserWarning)]) > 0  # Warning emitted
+>>> # Serialization maintains original formats for backward compatibility
+>>> info = Info(date_created=datetime(2023, 1, 15))
+>>> json_str = info.to_json()
+>>> assert "2023/01/15" in json_str  # Uses YYYY/MM/DD format
+```
