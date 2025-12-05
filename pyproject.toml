@@ -1,6 +1,5 @@
 [project]
 name = "coco-lib"
-version = "0.1.4"
 requires-python = ">=3.6"
 authors = [
     {name = "Kevin Barnard", email = "kbarnard@mbari.org"}
@@ -15,6 +14,7 @@ license-files = ["LICENSE"]
 dependencies = [
     "dataclasses-json>=0.5.4"
 ]
+dynamic = ["version"]
 
 [build-system]
 requires = ["hatchling"]
@@ -22,6 +22,9 @@ build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/coco_lib"]
+
+[tool.hatch.version]
+path = "src/coco_lib/__init__.py"
 
 [dependency-groups]
 dev = [
