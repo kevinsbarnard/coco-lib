@@ -2,6 +2,19 @@
 
 <!-- version list -->
 
+## v0.3.0 (2025-12-05)
+
+### Chores
+
+- Fix CI pipeline for PSR
+  ([`b7d8dc9`](https://github.com/kevinsbarnard/coco-lib/commit/b7d8dc9d2bb74844f471976fcccdc5a7b3711a47))
+
+### Features
+
+- Port dataclasses_json -> pydantic ([#9](https://github.com/kevinsbarnard/coco-lib/pull/9),
+  [`2265d63`](https://github.com/kevinsbarnard/coco-lib/commit/2265d63f73c5456d9f7f00a1a1b680396fc4000c))
+
+
 ## v0.2.0 (2025-12-05)
 
 ### Chores
