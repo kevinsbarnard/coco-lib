@@ -69,6 +69,7 @@ allow_zero_version = true
 no_git_verify = false
 tag_format = "v{version}"
 add_partial_tags = false
+version_variables = ["src/coco_lib/__init__.py:__version__"]
 
 [tool.semantic_release.branches.main]
 match = "(main|master)"
