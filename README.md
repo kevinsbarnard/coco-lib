@@ -96,7 +96,7 @@ The library now supports flexible datetime parsing using [dateparser](https://da
 >>> from coco_lib.common import Info, Image
 >>> # Various date formats are automatically parsed
 >>> info1 = Info.from_json('{"date_created": "2023/01/15"}')  # Original format
->>> info2 = Info.from_json('{"date_created": "2023-01-15"}')  # ISO format  
+>>> info2 = Info.from_json('{"date_created": "2023-01-15"}')  # ISO format
 >>> info3 = Info.from_json('{"date_created": "January 15, 2023"}')  # Natural language
 >>> info4 = Info.from_json('{"date_created": "15 Jan 2023"}')  # Short format
 >>> # All produce the same date
